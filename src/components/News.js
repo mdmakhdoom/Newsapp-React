@@ -30,16 +30,20 @@ export class News extends Component {
     document.title = `${this.capitlizeFirstLetter(this.props.category)} - NewsApp`;
   }
   async updateNews(){
+    this.props.setProgress(10);
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c9226c17120d49ea971e9697b6118820&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({loading: true});
     let data = await fetch(url);
+    this.props.setProgress(20);
     let parsedData = await data.json()
     console.log(parsedData);
+    this.props.setProgress(50);
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
       loading: false,
     })
+    this.props.setProgress(100);
   }
 
   async componentDidMount(){
@@ -96,10 +100,6 @@ export class News extends Component {
         </div>
         </div>
         </InfiniteScroll>
-        {/* <div className="container d-flex justify-content-between">
-        <button disabled={this.state.page<=1} type="button" className="btn btn-success" onClick={this.handlePreClick}>&laquo; Previous</button>
-        <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)} type="button" className="btn btn-success" onClick={this.handleNextClick}>Next &raquo;</button>
-        </div> */}
       </div>
     )
   }
