@@ -9,7 +9,6 @@ const News = (props)=> {
   const [loading, setLoading] = useState([])
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState(0)
-  // document.title = `${capitlizeFirstLetter(props.category)} - NewsApp`;
 
   News.defaultProps = {
     country: 'us',
@@ -42,12 +41,14 @@ const updateNews = async ()=>{
   }
   
   useEffect(() => {
+    document.title = `${capitlizeFirstLetter(props.category)} - NewsApp`;
     updateNews();
+    // eslint-disable-line 
   }, [])
 
   const fetchMoreData = async () => {
+    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=c9226c17120d49ea971e9697b6118820&page=${page+1}&pageSize=${props.pageSize}`;
     setPage(page+1)
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=c9226c17120d49ea971e9697b6118820&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json()
     setArticles(articles.concat(parsedData.articles))
@@ -55,8 +56,8 @@ const updateNews = async ()=>{
   };
   
     return (
-      <div className="container my-3">
-        <h1>NewsApp - United States Top {capitlizeFirstLetter(props.category)} Headline</h1>
+      <div className="container my-auto">
+        <h1 className="text-center" style={{margin: '35px 0px', marginTop: '90px'}}>NewsApp - United States Top {capitlizeFirstLetter(props.category)} Headline</h1>
         {loading && <Spinner/>}
         <InfiniteScroll
           dataLength={articles.length}
